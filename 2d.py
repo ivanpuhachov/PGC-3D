@@ -38,20 +38,25 @@ def seed_everything(seed):
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--prompt', type=str, default="old man")
+parser.add_argument('--prompt', type=str, default="a wooden car")
 parser.add_argument('--save_path', type=str, default="2d/2d_sds/clip0.1")
 parser.add_argument('--lr', type=float, default=0.01)
 parser.add_argument('--cfg', type=float, default=100.)
 parser.add_argument('--grad_clip_rgb', type=float, default=0.1)
+parser.add_argument('--sd_version', type=str, default='2.1')
+parser.add_argument('--sdxl', action='store_true', help="use SDXL")
+parser.add_argument('--csd', action='store_true', help="Classifier Score Distillation")
+parser.add_argument('--ssd', action='store_true', help="Stable Score Distillation")
 parser.add_argument('--grad_suppress_type', type=int, default=0)
-parser.add_argument('--random_init', action='store_true')
+parser.add_argument('--random_init', action='store_false')
 parser.add_argument('--img_init_path', type=str, default="data/background.png")
 parser.add_argument('--mode', type=str, default="rgb")
-parser.add_argument('--res', type=int, default=1024)
+parser.add_argument('--res', type=int, default=256)
 opt = parser.parse_args()
 opt.scheduler = 'dpm'
 opt.grad_clip_latent = -1
 opt.fp16 = True
+opt.save_path = f"2d/{'sdxl' if opt.sdxl else 'sd'}_{opt.grad_suppress_type}_r{opt.res}_{opt.prompt.replace(' ','')}"
 
 prompt = opt.prompt
 
@@ -105,8 +110,10 @@ with torch.no_grad():
 from guidance.sdxl import StableDiffusionXL
 from guidance.sd import StableDiffusion
 
-guidance = StableDiffusionXL("cuda", opt)
-#guidance = StableDiffusion("cuda", opt)
+if opt.sdxl:
+    guidance = StableDiffusionXL("cuda", opt)
+else:
+    guidance = StableDiffusion("cuda", opt)
 
 ploss = []
 
