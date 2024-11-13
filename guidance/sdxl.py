@@ -174,7 +174,7 @@ class StableDiffusionXL(nn.Module):
 
         return prompt_embeds, negative_prompt_embeds, pooled_prompt_embeds, negative_pooled_prompt_embeds
 
-    @torch.no_grad()
+    # @torch.no_grad()
     def train_step(self, text_embeddings, pred_rgb,
                    guidance_scale=100,
                    latents=None,
