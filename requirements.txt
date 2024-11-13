@@ -20,7 +20,8 @@ tensorboardX
 # git+https://github.com/NVlabs/tiny-cuda-nn/#subdirectory=bindings/torch
 
 # for stable-diffusion
-huggingface_hub
+# see https://github.com/easydiffusion/easydiffusion/issues/1851
+huggingface_hub==0.25.0
 diffusers==0.20.0
 accelerate
 transformers
