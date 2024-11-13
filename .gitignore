@@ -17,3 +17,4 @@ exp/
 results/
 scripts/debug.py
 scripts/run*.sh
+pretrained/*
