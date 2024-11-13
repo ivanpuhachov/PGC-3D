@@ -51,6 +51,7 @@ class StableDiffusionXL(nn.Module):
         with open('./TOKEN', 'r') as f:
             token = f.read().replace('\n', '')  # remove the last \n!
             print(f'[INFO] loaded hugging face access token from ./TOKEN!')
+            print(f"using {model_key} with ({use_refiner}) - {model_key_refiner}")
 
         precision_t = torch.float16 if opt.fp16 else torch.float32
         variant = "fp16" if opt.fp16 else None
@@ -173,6 +174,7 @@ class StableDiffusionXL(nn.Module):
 
         return prompt_embeds, negative_prompt_embeds, pooled_prompt_embeds, negative_pooled_prompt_embeds
 
+    @torch.no_grad()
     def train_step(self, text_embeddings, pred_rgb,
                    guidance_scale=100,
                    latents=None,
